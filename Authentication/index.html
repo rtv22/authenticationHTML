@@ -1,0 +1,118 @@
+<!DOCTYPE html5>
+<html>
+<head>
+    <link href="style.css" rel="stylesheet">
+    <title>Authentication</title>
+    <body>
+        <form class ="f">
+            <h1 class = "h">Authentication</h1>
+            <div class = "butt">
+                <input type="button" onclick="getMainIn()" value="Вход">
+                <input type="button" onclick="getRegBox()" value="Регистрация">
+                <input type="button" onclick="getRecoveryPassBox()" value="Забыли пароль?">
+            </div>
+            <div class = "logInVis">
+                <h2>Вход</h2>
+                <input type="text" size="20" id="inLog" placeholder="Логин">
+                <p><input type="password" size="20" id="inPass" placeholder="Пароль"></p>
+                <p><input class = "logIn" type="button" onclick="logIn_()" value=" Войти "></p>
+            </div>
+            <div class = "regInVis">
+                <h2>Регистрация</h2>
+                <input type="text" size="20" id="regLog" placeholder="Логин">
+                <p><input type="password" size="20" id="regPass" placeholder="Пароль"></p>
+                <p><input class = "logIn" type="button" onclick="reg_()" value=" Зарегистрироваться "></p>
+            </div>
+            <div class = "recoveryPasVis">
+                <h2>Восстановление пароля</h2>
+                <input type="text" size="20" id="recoveryLogin" placeholder="Логин">
+                <p><input type="password" size="20" id="recoveryCurrentPass" placeholder="Текущий пароль"></p>
+                <p><input type="password" size="20" id="recoveryNewPass" placeholder="Новый пароль"></p>
+                <p><input class = "log" type="button" onclick="recoveryPassword()" value=" Восстановить "></p>
+            </div>
+        </form>
+    </body>
+    <script>
+    var logInVis = document.getElementsByClassName("logInVis");
+    var regVis = document.getElementsByClassName("regInVis");
+    var recPass = document.getElementsByClassName("recoveryPasVis")
+    var countOfAccs = 0;
+    var dataBase = {
+        login: [countOfAccs],
+        password: [countOfAccs]
+    };
+    var check = {
+    }
+    function reg_(){
+        var curentLogin = document.getElementById("regLog").value
+        var curentPassword = document.getElementById("regPass").value
+        var str = " ";
+        var flag = true;
+        dataBase.login[countOfAccs] = curentLogin
+        dataBase.password[countOfAccs] = curentPassword
+        console.log(curentLogin, curentPassword)
+            for(var i = 0; i < countOfAccs; i++){
+                if(dataBase.login[i] == curentLogin){
+                    alert ('Пользователь с таким login уже существует')
+                    delete dataBase.login[countOfAccs]
+                    delete dataBase.password[countOfAccs] 
+                }
+            }
+            countOfAccs++;
+            alert ('Аккаунт создан успешно')
+        }
+
+    function logIn_(){
+        check.login = document.getElementById("inLog").value
+        check.password = document.getElementById("inPass").value  
+        flag = 0;                       
+        for(var i = 0; i < countOfAccs; i++){
+            if (check.login == dataBase.login[i] && check.password == dataBase.password[i]){
+                alert('Вход выполнен')
+                flag = true; 
+                break
+            }
+            else 
+                flag = false; 
+        }
+        if (flag == false )
+            alert ('Ошибка входа')
+    }
+    function getMainIn(){
+        recPass[0].style.visibility = "hidden";
+        regVis[0].style.visibility = "hidden";
+        logInVis[0].style.visibility = "visible";
+    }
+    function getRegBox(){
+        logInVis[0].style.visibility = "hidden";
+        recPass[0].style.visibility = "hidden";
+        regVis[0].style.visibility = "visible";
+    }
+    function getRecoveryPassBox(){
+       
+        regVis[0].style.visibility = "hidden";
+        logInVis[0].style.visibility = "hidden";
+        recPass[0].style.visibility = "visible";
+    }
+    
+    function recoveryPassword(){
+        var recLog = document.getElementById("recoveryLogin").value;
+        var currPassword = document.getElementById("recoveryCurrentPass").value;
+        var newPassword = document.getElementById("recoveryNewPass").value;
+        for(var i = 0; i < countOfAccs; i++){
+            if(dataBase.login[i] == recLog && dataBase.password[i] == currPassword){
+                console.log(dataBase.login[i], dataBase.password[i], newPassword);
+                dataBase.password[i] = newPassword
+                alert("Пароль успешно изменен")
+            }
+            else if(dataBase.login[i] != recLog){
+                alert("Пользователь не найдет")
+            }
+            else if(dataBase.login[i] == recLog && dataBase.password[i] != currPassword){
+                alert("Неверный пароль")
+            }
+        }
+    }
+    </script>
+</head>
+</html>
